@@ -1,0 +1,246 @@
+<!-- Merge conect with layout2.html that does not have side bar menuu -->
+{% extends "layout2.html" %}
+<!--Start Content -->
+{% block content %}
+
+ <!-- Add buttons to top of page -->
+	<div class="container">
+		<div class="col-sm-6">
+			<a class="btn btn-success" data-toggle="modal" href="#addEmployeeModal"><i class="material-icons">&#xE147;</i> <span>Add New Home</span></a> <!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a> -->
+		</div>
+
+		<!-- Start Record Rows section Table  Header-->
+		<table class="table table-striped" id="homesList">
+			<thead>
+				<tr>
+					<th><span class="custom-checkbox"><input id="selectAll" type="checkbox"> <label for="selectAll"></label></span></th>
+
+
+					<th><a href = "{{url_for('crud')}}?order_by=address"> Address</a>  <!-- just the parms passed -->
+                    <th><a href = "{{url_for('crud')}}?order_by=realtor"> Realtor</a>
+                    <th><a href = "{{url_for('crud')}}?order_by=style"> Style</a>
+                    <th><a href = "{{url_for('crud')}}?order_by=price"> Price</a>
+
+
+				</tr>
+			</thead>
+
+
+
+
+
+
+
+
+
+
+
+
+			<!-- End Table Header -->
+			<!-- Start looping records -->
+			<tr>  <!-- Loop over records passed from app.py from crudfuction -->
+				{% for row  in rows %}
+				<td><span class="custom-checkbox"><input id="checkbox2" name="options[]" type="checkbox" value="1"> <label for="checkbox2"></label></span></td>
+				<td class="visibility:" hidden="">{{ row.0}}</td><!-- hide the record number -->
+				<td>{{ row.1}}</td>
+				<td>{{ row.2}}</td>
+				<td>{{ row.3}}</td>
+				<td>{{ row.4}}</td>
+
+				<td>
+					<a class="edit" data-toggle="modal" href="#editEmployeeModal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> <a class="delete" data-toggle="modal" href="#deleteEmployeeModal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+			</tr>
+		{% endfor %}  <!-- End looping of records -->
+		</table>
+
+		<!-- Start page Scholl buttons  -->
+		<div>
+			<table>
+				<tr>
+					<td>
+						<form action="{{url_for('crud',filename='crud.html')}}?name=value" method="get">
+							<button name="previous" type="submit" value='6'>Previous</button>
+						</form>
+					</td>
+					<td>
+						<form action="{{url_for('crud',filename='crud.html')}}?name=value" method="get">
+							<button name="next" type="submit" value='6'>Next</button>
+						</form>
+					</td>
+				</tr>
+			</table>
+			<table>              <!-- This table for dbgging parm passing -->
+				<tr>
+					<td><span> {{ next_rec_set }} Next Rec Set  </span> </td>
+				</tr>
+				<tr>
+				    <td><span> {{ prev_rec_set }} Prev Rec set </span></td>
+				</tr>
+
+			       <td><span> {{ new_order_by }} Order by  </span></td>
+			</table>
+		</div>
+	</div>
+
+	<!-- End Contanier    Data Rows-->
+
+	<!-- jquerry script here  Used to idenify the values in a row of entry filds -->
+	<script>
+	$(document).ready(function(){
+	    $("#homesList").on('click', '.edit', function() {
+	     // get the current row
+	     var currentRow = $(this).closest("tr");
+	     var col0_check_box     = currentRow.find("td:eq(0)").html(); // get current row 1st table cell TD value
+	     var col1_hidden_recnum = currentRow.find("td:eq(1)").html(); // get current row 2nd table cell TD value
+	     var col2_address       = currentRow.find("td:eq(2)").html(); // get current row 2nd table cell TD value
+	     var col3_realtor       = currentRow.find("td:eq(3)").html(); // get current row 2nd table cell TD value
+	     var col4_style         = currentRow.find("td:eq(4)").html(); // get current row 2nd table cell TD value
+	     var col5_price         = currentRow.find("td:eq(5)").html(); // get current row 2nd table cell TD value
+
+
+	   $("#recnum").val(col1_hidden_recnum);
+
+	   $("#address").val(col2_address);
+	   $("#realtor").val(col3_realtor);
+	   $("#style").val(col4_style);
+	   $("#price").val(col5_price);
+
+	   });
+
+	});
+
+	</script>
+	<script>
+	$(document).ready(function(){
+	    $("#homesList").on('click', '.delete',  function() {
+	     // get the current row
+	     var currentRow = $(this).closest("tr");
+	     var col0_check_box     = currentRow.find("td:eq(0)").html(); // get current row 1st table cell TD value
+	     var col1_hidden_recnum = currentRow.find("td:eq(1)").html(); // get current row 2nd table cell TD value
+	     var col2_address       = currentRow.find("td:eq(2)").html(); // get current row 2nd table cell TD value
+	     var col3_realtor       = currentRow.find("td:eq(3)").html(); // get current row 2nd table cell TD value
+	     var col4_style         = currentRow.find("td:eq(4)").html(); // get current row 2nd table cell TD value
+	     var col5_price         = currentRow.find("td:eq(5)").html(); // get current row 2nd table cell TD value
+
+
+	   $("#recnum2").val(col1_hidden_recnum);
+
+	   $("#address2").val(col2_address);
+	   $("#realtor2").val(col3_realtor);
+	   $("#style2").val(col4_style);
+	   $("#price2").val(col5_price);
+
+
+	   });
+
+	});
+
+	</script> <!-- Add Modal HTML for INSERT -->
+	<div class="modal fade" id="addEmployeeModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Action for new entry INSERT -->
+				<form action="{{url_for('crud',filename='crud.html')}}" method="post">
+					<div class="modal-header">
+						<h4 class="modal-title">Add Home</h4><button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Address</label> <input class="form-control" name="address" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Realtor</label> <input class="form-control" name="realtor" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Style</label> <input class="form-control" name="style" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Price</label> <input class="form-control" name="price" required="" type="text"> <!-- <input type="text" id="num" name="number"> -->
+							 <label>recnum</label> <input class="visibility:hidden" name="recnum" type="number" value="0"> <!--id="recnum" -->
+							 <label>action_type</label> <input name="action" type="text" value="Insert">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input class="btn btn-default" data-dismiss="modal" type="button" value="Cancel"> <input class="btn btn-success" type="submit" value="Add">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- Edit Modal HTML for UPDATE -->
+	<div class="modal fade" id="editEmployeeModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="{{url_for('crud',filename='crud.html')}}" method="post">
+					<div class="modal-header">
+						<h4 class="modal-title">Edit Home</h4><button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Address</label> <input class="form-control" id="address" name="address" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Realtor</label> <input class="form-control" id="realtor" name="realtor" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Style</label> <input class="form-control" id="style" name="style" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Price</label> <input class="form-control" id="price" name="price" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>recnum</label> <input class="form-control" id="recnum" name="recnum" type="text">
+						</div>
+						<div class="form-group">
+							<label>action_type</label> <input name="action" type="text" value="Update">
+						</div>
+						<div class="modal-footer">
+							<input class="btn btn-default" data-dismiss="modal" type="button" value="Cancel"> <input class="btn btn-info" type="submit" value="Save">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- Delete Modal HTML -->
+	<div class="modal fade" id="deleteEmployeeModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="{{url_for('crud',filename='crud.html')}}" method="post">
+					<div class="modal-header">
+						<h4 class="modal-title">Delete Employee</h4><button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Address</label> <input class="form-control" id="address2" name="address" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Realtor</label> <input class="form-control" id="realtor2" name="realtor" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Style</label> <input class="form-control" id="style2" name="style" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>Price</label> <input class="form-control" id="price2" name="price" required="" type="text">
+						</div>
+						<div class="form-group">
+							<label>recnum</label> <input class="form-control" id="recnum2" name="recnum" type="text">
+						</div>
+						<div class="form-group">
+							<label>action_type</label> <input name="action" type="text" value="Delete">
+						</div>
+						<p>Are you sure you want to delete these Records?</p>
+						<p class="text-warning"><small>This action cannot be undone.</small></p>
+					</div>
+					<div class="modal-footer">
+						<input class="btn btn-default" data-dismiss="modal" type="button" value="Cancel"> <input class="btn btn-danger" type="submit" value="Delete">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
