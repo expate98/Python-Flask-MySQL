@@ -8,7 +8,7 @@ app = Flask(__name__)                                                           
 class AccessDb:
     # Create a class to be used for database access
     def __init__(self):                                                          # Build the class consuctor
-        self.db_con = pymysql.connect('localhost', 'root', '1f6was9', 'Homes')       # Basic connection string
+        self.db_con = pymysql.connect('localhost', 'root', ' ', 'Homes')       # Basic connection string
         self.db_cur = self.db_con.cursor()                                       # Get a db cursor
         self.cur_offset = 0                                                      # This class var is used to track SQL OFFSET when
         self.cur_order_by = "address"                                            # Persit the current order value
