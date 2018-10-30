@@ -8,26 +8,25 @@ app = Flask(__name__)                                                           
 class AccessDb:
     # Create a class to be used for database access
     def __init__(self):                                                          # Build the class consuctor
-        self.db_con = pymysql.connect('localhost', 'root', '1f6was9', 'Homes')   # Basic connection string
+        self.db_con = pymysql.connect('localhost', 'root', '1f6was9', 'Homes')       # Basic connection string
         self.db_cur = self.db_con.cursor()                                       # Get a db cursor
         self.cur_offset = 0                                                      # This class var is used to track SQL OFFSET when
         self.cur_order_by = "address"                                            # Persit the current order value
         self.cur_limit_by = 6
 
-    def execute_query(self, query_string, query_args):                           # Methdd used to execute SQL INSER, UPDATA and DELETE
-     #  if query_string != "NULL'" and query_args != 'NULL':                      # Execut only if INSERT, UPDATE or DELETE
-      self.db_cur.execute(query_string, query_args)                        # Uses pymsql execute
-      self.db_con.commit()                                                 # commit CRUD actions
+    def execute_query(self, query_string):                                       # Methdd used to execute SQL INSER, UPDATA and DELETE
+      self.db_cur.execute(query_string)                                          # Uses pymsql execute
+      self.db_con.commit()                                                       # commit CRUD actions
 
-    def execute_list(self,query_string):                           # Called with Select * and query offset parm
-       self.db_cur.execute(query_string)                                      # Execute the Select *
+    def execute_list(self,query_string):                                          # Called with Select * and query offset parm
+       self.db_cur.execute(query_string)                                          # Execute the Select *
 
-       rows = self.db_cur.fetchall()                                             # Fetching all records here to a varible
-       return rows                                                               # retrun the records to the caller
+       rows = self.db_cur.fetchall()                                              # Fetching all records here to a varible
+       return rows                                                                # retrun the records to the caller
      # end class object blueprint
 
 
-mydbobj = AccessDb()                                                             # Create an object from the class AccesDB()
+mydbobj = AccessDb()                                                              # Create an object from the class AccesDB()
 
 # Set up the routing paths
 @app.route("/")
@@ -54,39 +53,35 @@ def crud():
         recnum = request.form['recnum']
         action = request.form['action']
 
-
-        if action == 'Insert':                                          # recnum == '0':  Recond id has no value Set to 0 so create
-            dbq_string = "INSERT INTO listings (address, realtor, style, price)  Values (%s,%s,%s,%s)"
-            args = (address, realtor, style, price)
-            mydbobj.execute_query(dbq_string, args)                    # Call object execute method
+        if action == 'Insert':
+            dbq_string = "INSERT INTO listings (address, realtor, style, price)  Values ('%s','%s','%s', '%s')" %(address,realtor,style,price)
+            mydbobj.execute_query(dbq_string)                                    # Call object execute method
 
         if action == 'Update':
-            int(recnum)                                                 # comvert retruned char record to int for search and updating
-            dbq_string = "UPDATE listings SET address= %s, realtor=%s, style=%s, price =%s WHERE id =%s"
-            args = (address, realtor, style, price, recnum)
-            mydbobj.execute_query(dbq_string, args)
+            int(recnum)                                                           # comvert retruned char record to int for search and updating
+            dbq_string = "UPDATE listings SET address='%s', realtor='%s', style='%s', price ='%s' WHERE id ='%s'"  %(address, realtor, style, price, recnum)
+            mydbobj.execute_query(dbq_string)
 
         if action == 'Delete':  # Delete Record
-            int(recnum)                                                 # comvert retruned char record to int for search and updating
-            dbq_string = "DELETE FROM listings WHERE id=%s"
-            args = recnum
-            mydbobj.execute_query(dbq_string, args)
+            int(recnum)                                                             # comvert retruned char record to int for search and updating
+            dbq_string = "DELETE FROM listings WHERE id=%s" %(recnum)
+            mydbobj.execute_query(dbq_string)
 
         mydbobj.cur_offset = 0
         offset_var = mydbobj.cur_offset
         order_by = mydbobj.cur_order_by
         limit_by = mydbobj.cur_limit_by
-        select_rows = "SELECT id, address, realtor, style, price  FROM listings  ORDER By %s  LIMIT %s  OFFSET %s "
-        args = (order_by, limit_by, offset_var)
-        rows = mydbobj.execute_list(select_rows, args)
+        select_rows = "SELECT id, address, realtor, style, price  FROM listings  ORDER By %s  LIMIT %s  OFFSET %s " % (order_by,limit_by,offset_var)
+        #args = (order_by, limit_by, offset_var)
+        rows = mydbobj.execute_list(select_rows)
         return render_template('crud.html', rows=rows,)
 
 
 
     if request.method == 'GET':
-        next_rec_set = request.args.get('next')                          # Test for Next button - get args if key doesn't exist, returns None
-        prev_rec_set = request.args.get("previous")                      # Test for Previos  button - get args if key doesn't exist, returns None
-        new_order_by = request.args.get('order_by')                          # Test if order link was selecyrd and get parm
+        next_rec_set = request.args.get('next')                                       # Test for Next button - get args if key doesn't exist, returns None
+        prev_rec_set = request.args.get("previous")                                   # Test for Previos  button - get args if key doesn't exist, returns None
+        new_order_by = request.args.get('order_by')                                   # Test if order link was selecyrd and get parm
 
         if not new_order_by:
             mydbobj.cur_order_by = "address"
@@ -105,7 +100,7 @@ def crud():
         elif next_rec_set:
             order_by = mydbobj.cur_order_by
             limit_by = mydbobj.cur_limit_by
-            mydbobj.cur_offset = mydbobj.cur_offset +  int(next_rec_set)   # string is being passed from from needs to be converted to int
+            mydbobj.cur_offset = mydbobj.cur_offset +  int(next_rec_set)                   # string is being passed from from needs to be converted to int
             offset_var = mydbobj.cur_offset     # convert to string so can be concate with other string for select
             select_rows = "SELECT id, address, realtor,style, price  FROM listings  ORDER By %s  LIMIT %s  OFFSET %s" % (order_by, limit_by, offset_var)
             rows = mydbobj.execute_list(select_rows)
@@ -115,9 +110,9 @@ def crud():
         elif prev_rec_set:  # chack if next page was slected and get the parms back
             order_by = mydbobj.cur_order_by
             limit_by = mydbobj.cur_limit_by
-            mydbobj.cur_offset = mydbobj.cur_offset - int(prev_rec_set)    # string is being passed from from needs to be converted to int
+            mydbobj.cur_offset = mydbobj.cur_offset - int(prev_rec_set)                     # string is being passed from from needs to be converted to int
             if mydbobj.cur_offset < 0:
-                mydbobj.cur_offset = 0                                      # Don't allow the offset to become a nextive interger or will crash
+                mydbobj.cur_offset = 0                                                      # Don't allow the offset to become a nextive interger or will crash
             offset_var = mydbobj.cur_offset
             select_rows = "SELECT id, address, realtor,style, price  FROM listings  ORDER By %s  LIMIT %s  OFFSET %s" % (order_by, limit_by, offset_var)
             rows = mydbobj.execute_list(select_rows)

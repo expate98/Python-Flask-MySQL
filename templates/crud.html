@@ -8,35 +8,19 @@
 		<div class="col-sm-6">
 			<a class="btn btn-success" data-toggle="modal" href="#addEmployeeModal"><i class="material-icons">&#xE147;</i> <span>Add New Home</span></a> <!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a> -->
 		</div>
-
 		<!-- Start Record Rows section Table  Header-->
 		<table class="table table-striped" id="homesList">
 			<thead>
 				<tr>
 					<th><span class="custom-checkbox"><input id="selectAll" type="checkbox"> <label for="selectAll"></label></span></th>
-
-
 					<th><a href = "{{url_for('crud')}}?order_by=address"> Address</a>  <!-- just the parms passed -->
                     <th><a href = "{{url_for('crud')}}?order_by=realtor"> Realtor</a>
                     <th><a href = "{{url_for('crud')}}?order_by=style"> Style</a>
                     <th><a href = "{{url_for('crud')}}?order_by=price"> Price</a>
-
-
 				</tr>
 			</thead>
 
-
-
-
-
-
-
-
-
-
-
-
-			<!-- End Table Header -->
+	<!-- End Table Header -->
 			<!-- Start looping records -->
 			<tr>  <!-- Loop over records passed from app.py from crudfuction -->
 				{% for row  in rows %}
@@ -54,7 +38,9 @@
 			<tr>
 				<td></td>
 			</tr>
+
 		{% endfor %}  <!-- End looping of records -->
+
 		</table>
 
 		<!-- Start page Scholl buttons  -->

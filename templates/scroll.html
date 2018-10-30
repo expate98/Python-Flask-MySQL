@@ -10,7 +10,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Passing Parms Test</title>
 </head>
 
 
@@ -18,44 +18,23 @@
     <tr>
       <td>
 		<div>
-
-
-
-
-            <table>              <!-- This table for dbgging parm passing -->
+          <table>           <!-- This table for testing of passing parms  -->
 				<tr>
 					<td><span> {{ order_by }} is this address  </span> </td>
 				</tr>
 
 			</table>
-
-
-
-
-
- <!-- just the parms passed -->
-
-                    <th><<a   href = "{{url_for('scroll')}}?order_by=address"> Address</a>
+             <table>
+                    <th><<a href = "{{url_for('scroll')}}?order_by=address"> Address</a>
                     <th><a href = "{{url_for('scroll')}}?order_by=realor"> Realtor</a>
                     <th><a href = "{{url_for('scroll')}}?order_by=style"> Style</a>
                     <th><a href = "{{url_for('scroll')}}?order_by=price"> Price</a>
-
-
-
-
-		</div>
+             </table>
+ 		</div>
       </td>
      </tr>
    </table>
 
-
-
-
-cur.execute("SELECT * FROM song WHERE id = %s or id = %s", (1,2))
-It is important to note that when there are multiple parameters to substitue,
-you must use a tuple to enclose all of the parameters that need to be passed. The
-parameters are then substituted from left to right with tupe[0] being the
-left most substitution and tuple[n] being the right most substitution.
 
 
 
