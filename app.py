@@ -107,8 +107,8 @@ def crud():
             return render_template('crud.html', rows=rows, next_rec_set = next_rec_set, prev_rec_set= prev_rec_set  )
 
 
-        elif prev_rec_set:  # chack if next page was slected and get the parms back
-            order_by = mydbobj.cur_order_by
+        elif prev_rec_set:
+            order_by = mydbobj.cur_order_by                                                 # chack if next page was slected and get the parms back
             limit_by = mydbobj.cur_limit_by
             mydbobj.cur_offset = mydbobj.cur_offset - int(prev_rec_set)                     # string is being passed from from needs to be converted to int
             if mydbobj.cur_offset < 0:
