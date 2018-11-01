@@ -5,9 +5,11 @@ This project is a Python Flask based web site. It’s a work in progress.  As a 
 Getting Started
 I will update this readme as I get time soon
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
 Prerequisites
 What things you need to install the software and how to install them
 Give examples
+
 Installing
 A step by step series of examples that tell you how to get a development env running
 Say what the step will be
@@ -39,5 +41,6 @@ Bob Perry
  License
 This project is licensed under the MIT License - see the LICENSE.md file for details
 Acknowledgments
+
 Hat tip to anyone whose code was used
 Inspiration
