@@ -7,6 +7,7 @@ I will update this readme as I get time soon
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 Prerequisites
+We need to add some stuff here
 What things you need to install the software and how to install them
 Give examples
 
